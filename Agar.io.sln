@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agar.oi", "Agar.oi.csproj", "{F9CD3790-FF72-46DE-ABF2-B50580B9B727}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agar.io", "Agar.io.csproj", "{F9CD3790-FF72-46DE-ABF2-B50580B9B727}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
