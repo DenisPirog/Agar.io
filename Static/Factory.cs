@@ -41,7 +41,9 @@ namespace Agar.io
 
             Color color = GenerateColor();
 
-            return new Food(radius, color, position);
+            int outlineThickness = radius / 30;
+
+            return new Food(radius, color, position, outlineThickness);
         }
 
         private static Color GenerateColor()

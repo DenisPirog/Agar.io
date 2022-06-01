@@ -7,13 +7,13 @@ namespace Agar.io
     {
         public bool isAlive = true;
 
-        public Food(int radius, Color color, Vector2f position)
+        public Food(int radius, Color color, Vector2f position, int outlineThickness)
         {
             Radius = radius;
             FillColor = color;
             Position = position;
             OutlineColor = Color.Black;
-            OutlineThickness = Radius / 30;
+            OutlineThickness = outlineThickness;
         }
 
         public float Eat()
