@@ -29,24 +29,7 @@ namespace Agar.io
             bool inBorder = inXBorder && inYBorder;
 
             if (inBorder) Position = newPosition;
-        }
-
-        public Vector2f CalculatePath()
-        {
-            if (targetPosition == Position)
-            {
-                targetPosition = new Vector2f(rnd.Next(0, 1600 - (int)Radius * 2), rnd.Next(0, 900 - (int)Radius * 2));
-            }
-              
-            Vector2f path = new Vector2f();
-
-            if (targetPosition.X > Position.X) path.X += 1;
-            if (targetPosition.X < Position.X) path.X -= 1;
-            if (targetPosition.Y > Position.Y) path.Y += 1;
-            if (targetPosition.Y < Position.Y) path.Y -= 1;
-
-            return path;
-        }
+        }       
 
         public void TryEat(Player[] players, Food[] food)
         {
@@ -55,6 +38,7 @@ namespace Agar.io
                 if (players[i] != this && players[i].isAlive && players[i].Radius < Radius && VectorExtensions.isColliding(this, players[i]))
                 {
                     Radius += players[i].Eat();
+                    RepelPlayer(players[i].Radius);
                 }
             }
 
@@ -63,8 +47,31 @@ namespace Agar.io
                 if (food[i].isAlive && VectorExtensions.isColliding(this, food[i]))
                 {
                     Radius += food[i].Eat();
+                    RepelPlayer(food[i].Radius / 2);
                 }
             }
+        }
+
+        private void RepelPlayer(float force)
+        {
+            if (Position.X >= 800 && Position.Y >= 450) Position += new Vector2f(-force, -force);
+            if (Position.X >= 800 && Position.Y <= 450) Position += new Vector2f(-force, 0);
+            if (Position.X <= 800 && Position.Y >= 450) Position += new Vector2f(0, -force);
+        }
+
+        public Vector2f CalculatePath()
+        {
+            if (targetPosition == Position)
+            {
+                targetPosition = new Vector2f(rnd.Next(0, 1600 - (int)Radius * 2), rnd.Next(0, 900 - (int)Radius * 2));
+            }
+
+            if (targetPosition.X > Position.X) Position += new Vector2f(1, 0);
+            if (targetPosition.X < Position.X) Position += new Vector2f(-1, 0);
+            if (targetPosition.Y > Position.Y) Position += new Vector2f(0, 1);
+            if (targetPosition.Y < Position.Y) Position += new Vector2f(0, -1);
+
+            return Position;
         }
 
         public float Eat()

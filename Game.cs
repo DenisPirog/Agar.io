@@ -11,7 +11,7 @@ namespace Agar.io
         private const int windowHeight = 900;
 
         private Player[] players;
-        private const int speed = 4;
+        private const int speed = 2;
         private const int playerCount = 10;
 
         private Food[] food;
@@ -80,7 +80,7 @@ namespace Agar.io
                     }
                     else
                     {                
-                        players[i].TryMove(players[i].Position + players[i].CalculatePath(), windowWidth, windowHeight);
+                        players[i].TryMove(players[i].CalculatePath(), windowWidth, windowHeight);
                     }                  
 
                     players[i].TryEat(players, food);
@@ -115,7 +115,7 @@ namespace Agar.io
         private void DrawObjects()
         {
             window.DispatchEvents();
-            window.Clear(Color.White);
+            window.Clear(Color.Cyan);
           
             foreach (Food food in food)
             {
