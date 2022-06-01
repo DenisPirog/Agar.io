@@ -29,6 +29,7 @@ namespace Agar.io
             food = new Food[foodCount];
             font = new Font("Data/OpenSans-Bold.ttf");
             text = new Text("", font);
+            text.FillColor = Color.Black;
         }
 
         public void Start()
@@ -115,7 +116,7 @@ namespace Agar.io
         private void DrawObjects()
         {
             window.DispatchEvents();
-            window.Clear(Color.Cyan);
+            window.Clear(Color.White);
           
             foreach (Food food in food)
             {
@@ -135,7 +136,6 @@ namespace Agar.io
         private void UpdateText()
         {
             text.Position = players[0].Position + new Vector2f(players[0].Radius / 1.5f, players[0].Radius / 1.5f);
-            text.FillColor = Color.Black;
             text.CharacterSize = (uint)players[0].Radius / 2;
             text.DisplayedString = ((int)players[0].Radius).ToString();
         }
