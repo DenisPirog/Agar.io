@@ -10,13 +10,12 @@ namespace Agar.io
         private const int windowWidth = 1600;
         private const int windowHeight = 900;
 
-        private Random rnd = new Random();
         private Player[] players;
-        private int speed = 4;
-        private int playerCount = 10;
+        private const int speed = 4;
+        private const int playerCount = 10;
 
         private Food[] food;
-        private int foodCount = 50;
+        private const int foodCount = 50;
 
         private Text text;
         private Font font;
@@ -50,12 +49,12 @@ namespace Agar.io
         {
             for (int i = 0; i < playerCount; i++)
             {
-                players[i] = PlayerFactory.CreatePlayer();
+                players[i] = Factory.CreatePlayer();
             }
 
             for (int i = 0; i < foodCount; i++)
             {
-                food[i] = FoodFactory.CreateFood();
+                food[i] = Factory.CreateFood();
             }
         }
 
