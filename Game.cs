@@ -10,12 +10,15 @@ namespace Agar.io
         private const int windowWidth = 1600;
         private const int windowHeight = 900;
 
+        private Random rnd = new Random();
         private Player[] players;
-        private Player player;
         private int speed = 4;
         private int playerCount = 10;
 
-        private Drawable[] objectsToDraw;
+        private Food[] food;
+        private int foodCount = 50;
+
+        private Text text;
         private Font font;
 
         private RenderWindow window;
@@ -24,8 +27,9 @@ namespace Agar.io
         {
             window = new RenderWindow(new VideoMode(windowWidth, windowHeight), "Agar.io");
             players = new Player[playerCount];
+            food = new Food[foodCount];
             font = new Font("Data/OpenSans-Bold.ttf");
-            objectsToDraw = new Drawable[1];
+            text = new Text("", font);
         }
 
         public void Start()
@@ -39,19 +43,20 @@ namespace Agar.io
             window.Closed += WindowClosed;
             window.SetFramerateLimit(60);
 
-            CreateField();
+            SpawnObjects();
         }
 
-        private void CreateField()
+        private void SpawnObjects()
         {
             for (int i = 0; i < playerCount; i++)
             {
                 players[i] = PlayerFactory.CreatePlayer();
             }
 
-            player = players[0];      
-
-            //SpawnFood
+            for (int i = 0; i < foodCount; i++)
+            {
+                food[i] = FoodFactory.CreateFood();
+            }
         }
 
         private void GameLoop()
@@ -59,28 +64,29 @@ namespace Agar.io
             while (!isEndGame())
             {
                 UpdatePlayers();
-
-                //UpdatePlayers
-                //Move
-                //TryEat
-                //Collide
-                DrawField();
+                UpdateText();
+                DrawObjects();
             }
         }
 
         private void UpdatePlayers()
         {
-            player.TryMove(player.Position + Input(), players, windowWidth, windowHeight);
-
-            for (int i = 1; i <= players.Length - 1; i++)
+            for (int i = 0; i < players.Length; i++)
             {
-                players[i].TryMove(players[i].Position + new Vector2f(1, 1), players, windowWidth, windowHeight);
-            }
+                if (players[i].isAlive)
+                { 
+                    if (i == 0)
+                    {
+                        players[i].TryMove(players[i].Position + Input(), windowWidth, windowHeight);
+                    }
+                    else
+                    {                
+                        players[i].TryMove(players[i].Position + players[i].CalculatePath(), windowWidth, windowHeight);
+                    }                  
 
-            Text text = new Text("YOU", font);
-            text.Position = new Vector2f(player.Position.X + 7.5f, player.Position.Y + 17);
-            text.CharacterSize = 20;
-            objectsToDraw[0] = text;
+                    players[i].TryEat(players, food);
+                }
+            }
         }
 
         private Vector2f Input()
@@ -107,26 +113,47 @@ namespace Agar.io
             return input;
         }
 
-        private void DrawField()
+        private void DrawObjects()
         {
             window.DispatchEvents();
             window.Clear(Color.White);
+          
+            foreach (Food food in food)
+            {
+                if (food.isAlive) window.Draw(food);
+            }
 
             foreach (Player player in players)
             {
-                window.Draw(player);
+                if (player.isAlive) window.Draw(player);
             }
 
-            foreach (Drawable obj in objectsToDraw)
-            {
-                window.Draw(obj);
-            }
+            if (players[0].isAlive) window.Draw(text);
+
             window.Display();
+        }
+
+        private void UpdateText()
+        {
+            text.Position = players[0].Position + new Vector2f(players[0].Radius / 1.5f, players[0].Radius / 1.5f);
+            text.FillColor = Color.Black;
+            text.CharacterSize = (uint)players[0].Radius / 2;
+            text.DisplayedString = ((int)players[0].Radius).ToString();
         }
 
         private bool isEndGame()
         {
-            return false;
+            int alivePlayerCount = 0;
+
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (players[i].isAlive)
+                {
+                    alivePlayerCount += 1;
+                }
+            }
+
+            return alivePlayerCount == 1;
         }
 
         private void WindowClosed(object sender, EventArgs e)

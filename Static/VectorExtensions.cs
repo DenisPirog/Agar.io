@@ -18,7 +18,10 @@ namespace Agar.io
 
         public static bool isColliding(CircleShape object1, CircleShape object2)
         {
-            double distance = DistanceTo(object1.Position, object2.Position);
+            Vector2f obj1Fix = new Vector2f(object1.Position.X + object1.Radius, object1.Position.Y + object1.Radius);
+            Vector2f obj2Fix = new Vector2f(object2.Position.X + object2.Radius, object2.Position.Y + object2.Radius);
+
+            double distance = DistanceTo(obj1Fix, obj2Fix);
 
             if (distance < object1.Radius + object2.Radius)
             {

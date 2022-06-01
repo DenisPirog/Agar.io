@@ -12,6 +12,7 @@ namespace Agar.io
         {
             int radius = 30;
 
+            Vector2f target = new Vector2f(rnd.Next(0, 1600 - radius * 2), rnd.Next(0, 900 - radius * 2));
             Vector2f position = new Vector2f(rnd.Next(0, 1600 - radius * 2), rnd.Next(0, 900 - radius * 2));
 
             byte r = (byte)rnd.Next(1, 255);
@@ -20,7 +21,7 @@ namespace Agar.io
 
             Color color = new Color(r, g, b);
 
-            return new Player(radius, color, position);
+            return new Player(radius, color, position, target);
         }
     }
 }
