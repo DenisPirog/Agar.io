@@ -61,6 +61,7 @@
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Game\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Static\Generator.cs" />
     <Compile Include="Static\RandomFloat.cs" />
     <Compile Include="Static\VectorExtensions.cs" />
   </ItemGroup>

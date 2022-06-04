@@ -72,20 +72,15 @@ namespace Agar.io
 
         private void UpdatePlayers()
         {
-            for (int i = 0; i < players.Length; i++)
+            foreach (Player player in players)
             {
-                if (players[i].isAlive)
-                { 
-                    if (i == playerNumber)
-                    {
-                        players[i].TryMove(players[i].Position + Input());
-                    }
-                    else
-                    {                
-                        players[i].TryMove(players[i].CalculatePath());
-                    }                  
+                if (player.isAlive)
+                {
+                    if (player == players[playerNumber]) player.TryMove(player.Position + Input());
 
-                    players[i].TryEat(players, food);
+                    else player.TryMove(player.CalculatePath());
+
+                    player.TryEat(players, food);
                 }
             }
         }

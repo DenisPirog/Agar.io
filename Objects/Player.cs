@@ -21,12 +21,16 @@ namespace Agar.io
 
         public void TryMove(Vector2f newPosition)
         {
+            if (isInBorder(newPosition)) Position = newPosition;
+        }
+        
+        private bool isInBorder(Vector2f newPosition)
+        {
             bool inXBorder = newPosition.X <= Game.width - Radius * 2 && newPosition.X >= 0;
             bool inYBorder = newPosition.Y <= Game.height - Radius * 2 && newPosition.Y >= 0;
-            bool inBorder = inXBorder && inYBorder;
 
-            if (inBorder) Position = newPosition;
-        }       
+            return inXBorder && inYBorder;
+        }
 
         public void TryEat(Player[] players, Food[] food)
         {
@@ -72,13 +76,16 @@ namespace Agar.io
         {
             if (targetPosition == Position)
             {
-                targetPosition = VectorExtensions.GeneratePosition(Radius);
+                targetPosition = Generator.GeneratePosition(Radius);
             }
 
-            if (targetPosition.X > Position.X) Position += new Vector2f(1, 0);
-            if (targetPosition.X < Position.X) Position += new Vector2f(-1, 0);
-            if (targetPosition.Y > Position.Y) Position += new Vector2f(0, 1);
-            if (targetPosition.Y < Position.Y) Position += new Vector2f(0, -1);
+            if (isInBorder(targetPosition))
+            {
+                if (targetPosition.X > Position.X) Position += new Vector2f(1, 0);
+                if (targetPosition.X < Position.X) Position += new Vector2f(-1, 0);
+                if (targetPosition.Y > Position.Y) Position += new Vector2f(0, 1);
+                if (targetPosition.Y < Position.Y) Position += new Vector2f(0, -1);
+            }
 
             return Position;
         }
