@@ -74,7 +74,7 @@ namespace Agar.io
 
         public Vector2f CalculatePath()
         {
-            if (targetPosition == Position)
+            if(VectorExtensions.isPositionsAreEqual(Position, targetPosition))
             {
                 targetPosition = Generator.GeneratePosition(Radius);
             }
