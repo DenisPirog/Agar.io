@@ -72,14 +72,16 @@ namespace Agar.io
 
         private void UpdatePlayers()
         {
+            Vector2f positionToMove;
+
             foreach (Player player in players)
             {
                 if (player.isAlive)
                 {
-                    if (player == players[playerNumber]) player.TryMove(player.Position + Input());
+                    if (player == players[playerNumber]) positionToMove = player.Position + Input();
+                    else positionToMove = player.CalculatePath();
 
-                    else player.TryMove(player.CalculatePath());
-
+                    player.TryMove(positionToMove);
                     player.TryEat(players, food);
                 }
             }
