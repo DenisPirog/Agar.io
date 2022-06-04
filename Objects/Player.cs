@@ -6,26 +6,23 @@ namespace Agar.io
 {
     public class Player : CircleShape
     {
-        private Random rnd;
-
         public bool isAlive = true;
         public Vector2f targetPosition;
 
-        public Player(int radius, Color color, Vector2f position, Vector2f target)
+        public Player(int radius, Color color, Vector2f position, Vector2f target, int outlineThickness)
         {
             Radius = radius;
             FillColor = color;
             Position = position;
             OutlineColor = Color.Black;
-            OutlineThickness = Radius / 30;
+            OutlineThickness = outlineThickness;
             targetPosition = target;
-            rnd = new Random();
         }
 
-        public void TryMove(Vector2f newPosition, int width, int height)
+        public void TryMove(Vector2f newPosition)
         {
-            bool inXBorder = newPosition.X <= width - Radius * 2 && newPosition.X >= 0;
-            bool inYBorder = newPosition.Y <= height - Radius * 2 && newPosition.Y >= 0;
+            bool inXBorder = newPosition.X <= Game.width - Radius * 2 && newPosition.X >= 0;
+            bool inYBorder = newPosition.Y <= Game.height - Radius * 2 && newPosition.Y >= 0;
             bool inBorder = inXBorder && inYBorder;
 
             if (inBorder) Position = newPosition;
@@ -33,37 +30,49 @@ namespace Agar.io
 
         public void TryEat(Player[] players, Food[] food)
         {
-            for (int i = 0; i <= players.Length - 1; i++)
+            foreach (Player player in players)
             {
-                if (players[i] != this && players[i].isAlive && players[i].Radius < Radius && VectorExtensions.isColliding(this, players[i]))
+                if (isCollideWithAlivePlayer(player))
                 {
-                    Radius += players[i].Eat();
-                    RepelPlayer(players[i].Radius);
+                    if (CanEatPlayer(player))
+                    {
+                        Radius += player.Eat();
+                        RepelPlayer(player.Radius);
+                    }
                 }
             }
 
-            for (int i = 0; i <= food.Length - 1; i++)
+            foreach (Food meal in food)
             {
-                if (food[i].isAlive && VectorExtensions.isColliding(this, food[i]))
+                if (isCollideWithFood(meal))
                 {
-                    Radius += food[i].Eat();
-                    RepelPlayer(food[i].Radius / 2);
+                    Radius += meal.Eat();
+                    RepelPlayer(meal.Radius / 2);
                 }
-            }
+            }    
         }
+
+        private bool CanEatPlayer(Player playerToEat)
+            => Radius - playerToEat.Radius > 0.001;
+
+        private bool isCollideWithAlivePlayer(Player player)
+            => VectorExtensions.isColliding(this, player) && player != this && player.isAlive;
+
+        private bool isCollideWithFood(Food food)
+            => food.isAlive && VectorExtensions.isColliding(this, food);
 
         private void RepelPlayer(float force)
         {
-            if (Position.X >= 800 && Position.Y >= 450) Position += new Vector2f(-force, -force);
-            if (Position.X >= 800 && Position.Y <= 450) Position += new Vector2f(-force, 0);
-            if (Position.X <= 800 && Position.Y >= 450) Position += new Vector2f(0, -force);
+            if (Position.X >= Game.width / 2 && Position.Y >= Game.height) Position += new Vector2f(-force, -force);
+            if (Position.X >= Game.width / 2 && Position.Y <= Game.height) Position += new Vector2f(-force, 0);
+            if (Position.X <= Game.width / 2 && Position.Y >= Game.height) Position += new Vector2f(0, -force);
         }
 
         public Vector2f CalculatePath()
         {
             if (targetPosition == Position)
             {
-                targetPosition = new Vector2f(rnd.Next(0, 1600 - (int)Radius * 2), rnd.Next(0, 900 - (int)Radius * 2));
+                targetPosition = VectorExtensions.GeneratePosition(Radius);
             }
 
             if (targetPosition.X > Position.X) Position += new Vector2f(1, 0);

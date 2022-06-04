@@ -30,5 +30,13 @@ namespace Agar.io
 
             return false;
         }
+
+        public static Vector2f GeneratePosition(float radius)
+        {
+            float randomX = RandomFloat.Next(radius, Game.width - radius * 2);
+            float randomY = RandomFloat.Next(radius, Game.height - radius * 2);
+
+            return new Vector2f(randomX, randomY);
+        }
     }
 }

@@ -7,12 +7,13 @@ namespace Agar.io
 {
     class Game
     {
-        private const int windowWidth = 1600;
-        private const int windowHeight = 900;
+        public static uint width = 1600;
+        public static uint height = 900;
 
         private Player[] players;
         private const int speed = 2;
         private const int playerCount = 10;
+        private const int playerNumber = 0;
 
         private Food[] food;
         private const int foodCount = 50;
@@ -24,7 +25,7 @@ namespace Agar.io
 
         public Game()
         {
-            window = new RenderWindow(new VideoMode(windowWidth, windowHeight), "Agar.io");
+            window = new RenderWindow(new VideoMode(width, height), "Agar.io");
             players = new Player[playerCount];
             food = new Food[foodCount];
             font = new Font("Data/OpenSans-Bold.ttf");
@@ -75,13 +76,13 @@ namespace Agar.io
             {
                 if (players[i].isAlive)
                 { 
-                    if (i == 0)
+                    if (i == playerNumber)
                     {
-                        players[i].TryMove(players[i].Position + Input(), windowWidth, windowHeight);
+                        players[i].TryMove(players[i].Position + Input());
                     }
                     else
                     {                
-                        players[i].TryMove(players[i].CalculatePath(), windowWidth, windowHeight);
+                        players[i].TryMove(players[i].CalculatePath());
                     }                  
 
                     players[i].TryEat(players, food);
@@ -93,22 +94,10 @@ namespace Agar.io
         {
             Vector2f input = new Vector2f();
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-            {
-                input.Y = -speed;
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-            {
-                input.Y = speed;
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-            {
-                input.X = -speed;
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-            {
-                input.X = speed;
-            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.W)) input.Y = -speed;
+            if (Keyboard.IsKeyPressed(Keyboard.Key.S)) input.Y = speed;
+            if (Keyboard.IsKeyPressed(Keyboard.Key.A)) input.X = -speed;
+            if (Keyboard.IsKeyPressed(Keyboard.Key.D)) input.X = speed;
 
             return input;
         }
@@ -128,7 +117,7 @@ namespace Agar.io
                 if (player.isAlive) window.Draw(player);
             }
 
-            if (players[0].isAlive) window.Draw(text);
+            if (players[playerNumber].isAlive) window.Draw(text);
 
             window.Display();
         }

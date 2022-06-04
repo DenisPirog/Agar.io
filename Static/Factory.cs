@@ -25,19 +25,21 @@ namespace Agar.io
                     break;
             }
       
-            Vector2f position = GeneratePosition(radius);
-            Vector2f target = GeneratePosition(radius);
+            Vector2f position = VectorExtensions.GeneratePosition(radius);
+            Vector2f target = VectorExtensions.GeneratePosition(radius);
 
             Color color = GenerateColor();
 
-            return new Player(radius, color, position, target);
+            int outlineThickness = radius / 30;
+
+            return new Player(radius, color, position, target, outlineThickness);
         }
 
         public static Food CreateFood()
         {
             int radius = 10;
 
-            Vector2f position = GeneratePosition(radius);
+            Vector2f position = VectorExtensions.GeneratePosition(radius);
 
             Color color = GenerateColor();
 
@@ -46,21 +48,13 @@ namespace Agar.io
             return new Food(radius, color, position, outlineThickness);
         }
 
-        private static Color GenerateColor()
+        public static Color GenerateColor()
         {
             byte r = (byte)rnd.Next(1, 255);
             byte g = (byte)rnd.Next(1, 255);
             byte b = (byte)rnd.Next(1, 255);
 
             return new Color(r, g, b);
-        }
-
-        private static Vector2f GeneratePosition(int radius)
-        {
-            int randomX = rnd.Next(radius, 1600 - radius * 2);
-            int randomY = rnd.Next(radius, 900 - radius * 2);
-
-            return new Vector2f(randomX, randomY);
         }
     }
 }
