@@ -13,7 +13,7 @@ namespace Agar.io
         private Player[] players;
         private const int speed = 2;
         private const int playerCount = 10;
-        private const int playerNumber = 0;
+        private int playerNumber = 0;
 
         private Food[] food;
         private const int foodCount = 50;
@@ -64,9 +64,32 @@ namespace Agar.io
         {          
             while (!isEndGame())
             {
+                TrySwitchPlayer();
                 UpdatePlayers();
                 UpdateText();
                 DrawObjects();
+            }
+        }
+
+        private void TrySwitchPlayer()
+        {
+            double minDis = double.MaxValue;
+            int index = 0;
+            if (Keyboard.IsKeyPressed(Keyboard.Key.R))
+            {
+                for (int i = 0; i < playerCount - 1; i++)
+                {
+                    if (i == playerNumber)
+                        continue;
+                    double dis = VectorExtensions.DistanceTo(players[playerNumber].Position, players[i].Position);
+                    if (dis < minDis)
+                    {
+                        minDis = dis;
+                        index = i;
+                    }
+                }
+
+                playerNumber = index;
             }
         }
 

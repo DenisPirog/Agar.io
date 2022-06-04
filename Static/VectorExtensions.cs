@@ -33,7 +33,7 @@ namespace Agar.io
 
         public static bool isPositionsAreEqual(Vector2f first, Vector2f second)
         {
-            bool isXEqual = Math.Abs(first.X - second.X) <= 0.001; 
+            bool isXEqual = Math.Abs(first.X - second.X) <= 0.001;
             bool isYEqual = Math.Abs(first.Y - second.Y) <= 0.001;
             return isXEqual && isYEqual;
         }
