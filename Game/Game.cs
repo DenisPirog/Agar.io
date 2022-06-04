@@ -75,20 +75,23 @@ namespace Agar.io
         {
             double minDis = double.MaxValue;
             int index = 0;
+
             if (Keyboard.IsKeyPressed(Keyboard.Key.R))
             {
                 for (int i = 0; i < playerCount - 1; i++)
                 {
-                    if (i == playerNumber)
+                    if (i == playerNumber || !players[i].isAlive)
                         continue;
+
                     double dis = VectorExtensions.DistanceTo(players[playerNumber].Position, players[i].Position);
+
                     if (dis < minDis)
                     {
                         minDis = dis;
                         index = i;
                     }
                 }
-
+              
                 playerNumber = index;
             }
         }
@@ -144,9 +147,9 @@ namespace Agar.io
 
         private void UpdateText()
         {
-            text.Position = players[0].Position + new Vector2f(players[0].Radius / 1.5f, players[0].Radius / 1.5f);
-            text.CharacterSize = (uint)players[0].Radius / 2;
-            text.DisplayedString = ((int)players[0].Radius).ToString();
+            text.Position = players[playerNumber].Position + new Vector2f(players[playerNumber].Radius / 1.5f, players[playerNumber].Radius / 1.5f);
+            text.CharacterSize = (uint)players[playerNumber].Radius / 2;
+            text.DisplayedString = ((int)players[playerNumber].Radius).ToString();
         }
 
         private bool isEndGame()
