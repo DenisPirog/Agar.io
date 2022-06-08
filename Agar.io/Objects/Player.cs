@@ -17,14 +17,7 @@ namespace Agar.io.Objects
             OutlineThickness = outlineThickness;
         }
 
-        public void Update(Vector2f input, Player[] players, Food[] food)
-        {
-            TryMove(input);
-            TryEat(players);
-            TryEat(food);
-        }
-
-        private void TryMove(Vector2f input)
+        public void TryMove(Vector2f input)
         {
             Vector2f newPosition = Position + input;
 
@@ -44,7 +37,7 @@ namespace Agar.io.Objects
             return inXBorder && inYBorder;
         }
 
-        private void TryEat(GameObject[] gameObjects)
+        public void TryEat(GameObject[] gameObjects)
         {          
             foreach (GameObject gameObject in gameObjects)
             {
