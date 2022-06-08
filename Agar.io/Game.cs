@@ -86,7 +86,7 @@ namespace Agar.io
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.R))
             {
-                for (int i = 0; i < playerCount - 1; i++)
+                for (int i = 0; i < playerCount; i++)
                 {
                     if (i == playerNumber || !players[i].isAlive || !players[playerNumber].isAlive)
                         continue;
@@ -142,10 +142,8 @@ namespace Agar.io
 
         private void UpdateText()
         {
-            float x = players[playerNumber].Position.X + players[playerNumber].Radius / 1.5f;
-            float y = players[playerNumber].Position.Y + players[playerNumber].Radius / 1.5f;
-
-            Vector2f textPos = new Vector2f(x, y);
+            Vector2f radius = new Vector2f(players[playerNumber].Radius / 1.5f, players[playerNumber].Radius / 1.5f);
+            Vector2f textPos = players[playerNumber].Position + radius;
 
             text.Position = textPos;
             text.CharacterSize = (uint)players[playerNumber].Radius / 2;

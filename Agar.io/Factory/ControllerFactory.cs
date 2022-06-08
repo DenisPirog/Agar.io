@@ -1,6 +1,5 @@
 ﻿using Agar.io.Objects;
 using Agar.io.Utils;
-using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io.Factory
