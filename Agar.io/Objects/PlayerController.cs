@@ -14,7 +14,7 @@ namespace Agar.io.Objects
             this.targetPosition = targetPosition;
         }
 
-        public Vector2f GetInput(Player player)
+        public Vector2f GetDirection(Player player)
         {
             Vector2f input = new Vector2f();
 

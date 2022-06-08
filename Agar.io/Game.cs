@@ -115,7 +115,7 @@ namespace Agar.io
             {
                 if (players[i].isAlive)
                 {
-                    players[i].Update(controllers[i].GetInput(players[i]), players, food);
+                    players[i].Update(controllers[i].GetDirection(players[i]), players, food);
                 }
             }
         }
