@@ -55,15 +55,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Objects\Food.cs" />
-    <Compile Include="Static\Factory.cs" />
-    <Compile Include="Game\Game.cs" />
-    <Compile Include="Objects\Player.cs" />
-    <Compile Include="Game\Program.cs" />
+    <Compile Include="Agar.io\Factory\ControllerFactory.cs" />
+    <Compile Include="Agar.io\Factory\FoodFactory.cs" />
+    <Compile Include="Agar.io\Factory\PlayerFactory.cs" />
+    <Compile Include="Agar.io\Objects\Food.cs" />
+    <Compile Include="Agar.io\Game.cs" />
+    <Compile Include="Agar.io\Objects\GameObject.cs" />
+    <Compile Include="Agar.io\Objects\Player.cs" />
+    <Compile Include="Agar.io\Objects\PlayerController.cs" />
+    <Compile Include="Agar.io\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Static\Generator.cs" />
-    <Compile Include="Static\RandomFloat.cs" />
-    <Compile Include="Static\VectorExtensions.cs" />
+    <Compile Include="Agar.io\Utils\Generator.cs" />
+    <Compile Include="Agar.io\Utils\AgarioRandom.cs" />
+    <Compile Include="Agar.io\Utils\MathExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

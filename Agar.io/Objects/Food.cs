@@ -1,12 +1,10 @@
 ﻿using SFML.System;
 using SFML.Graphics;
 
-namespace Agar.io
+namespace Agar.io.Objects
 {
-    public class Food : CircleShape
+    public class Food : GameObject
     {
-        public bool isAlive = true;
-
         public Food(int radius, Color color, Vector2f position, int outlineThickness)
         {
             Radius = radius;
@@ -14,12 +12,6 @@ namespace Agar.io
             Position = position;
             OutlineColor = Color.Black;
             OutlineThickness = outlineThickness;
-        }
-
-        public float Eat()
-        {
-            isAlive = false;
-            return Radius / 4;
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using System;
+using Agar.io.Objects;
+using Agar.io.Utils;
+using Agar.io.Factory;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
@@ -7,16 +10,17 @@ namespace Agar.io
 {
     class Game
     {
-        public static uint width = 1600;
-        public static uint height = 900;
+        private static uint width = 1600;
+        private static uint height = 900;
+
+        private PlayerController[] controllers;
 
         private Player[] players;
-        private const int speed = 2;
-        private const int playerCount = 10;
+        private int playerCount = 10;
         private int playerNumber = 0;
 
         private Food[] food;
-        private const int foodCount = 50;
+        private int foodCount = 50;
 
         private Text text;
         private Font font;
@@ -26,6 +30,7 @@ namespace Agar.io
         public Game()
         {
             window = new RenderWindow(new VideoMode(width, height), "Agar.io");
+            controllers = new PlayerController[playerCount];
             players = new Player[playerCount];
             food = new Food[foodCount];
             font = new Font("Data/OpenSans-Bold.ttf");
@@ -44,19 +49,22 @@ namespace Agar.io
             window.Closed += WindowClosed;
             window.SetFramerateLimit(60);
 
-            SpawnObjects();
+            CreateObjects();
         }
 
-        private void SpawnObjects()
+        private void CreateObjects()
         {
             for (int i = 0; i < playerCount; i++)
             {
-                players[i] = Factory.CreatePlayer();
+                players[i] = PlayerFactory.CreatePlayer();
+                controllers[i] = ControllerFactory.CreateController(players[i].Radius);
             }
+
+            controllers[playerNumber].isBot = false;
 
             for (int i = 0; i < foodCount; i++)
             {
-                food[i] = Factory.CreateFood();
+                food[i] = FoodFactory.CreateFood();
             }
         }
 
@@ -80,10 +88,10 @@ namespace Agar.io
             {
                 for (int i = 0; i < playerCount - 1; i++)
                 {
-                    if (i == playerNumber || !players[i].isAlive)
+                    if (i == playerNumber || !players[i].isAlive || !players[playerNumber].isAlive)
                         continue;
 
-                    double dis = VectorExtensions.DistanceTo(players[playerNumber].Position, players[i].Position);
+                    double dis = players[playerNumber].Position.DistanceTo(players[i].Position);
 
                     if (dis < minDis)
                     {
@@ -91,53 +99,40 @@ namespace Agar.io
                         index = i;
                     }
                 }
-              
+
+                PlayerController old = controllers[playerNumber];
+
+                controllers[playerNumber] = controllers[index];
+                controllers[index] = old;
+
                 playerNumber = index;
             }
         }
 
         private void UpdatePlayers()
         {
-            Vector2f positionToMove;
-
-            foreach (Player player in players)
+            for (int i = 0; i < playerCount; i++)
             {
-                if (player.isAlive)
+                if (players[i].isAlive)
                 {
-                    if (player == players[playerNumber]) positionToMove = player.Position + Input();
-                    else positionToMove = player.CalculatePath();
-
-                    player.TryMove(positionToMove);
-                    player.TryEat(players, food);
+                    players[i].Update(controllers[i].GetInput(players[i]), players, food);
                 }
             }
-        }
-
-        private Vector2f Input()
-        {
-            Vector2f input = new Vector2f();
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.W)) input.Y = -speed;
-            if (Keyboard.IsKeyPressed(Keyboard.Key.S)) input.Y = speed;
-            if (Keyboard.IsKeyPressed(Keyboard.Key.A)) input.X = -speed;
-            if (Keyboard.IsKeyPressed(Keyboard.Key.D)) input.X = speed;
-
-            return input;
         }
 
         private void DrawObjects()
         {
             window.DispatchEvents();
             window.Clear(Color.White);
-          
-            foreach (Food food in food)
-            {
-                if (food.isAlive) window.Draw(food);
-            }
-
+         
             foreach (Player player in players)
             {
                 if (player.isAlive) window.Draw(player);
+            }
+
+            foreach (Food food in food)
+            {
+                if (food.isAlive) window.Draw(food);
             }
 
             if (players[playerNumber].isAlive) window.Draw(text);
@@ -147,7 +142,12 @@ namespace Agar.io
 
         private void UpdateText()
         {
-            text.Position = players[playerNumber].Position + new Vector2f(players[playerNumber].Radius / 1.5f, players[playerNumber].Radius / 1.5f);
+            float x = players[playerNumber].Position.X + players[playerNumber].Radius / 1.5f;
+            float y = players[playerNumber].Position.Y + players[playerNumber].Radius / 1.5f;
+
+            Vector2f textPos = new Vector2f(x, y);
+
+            text.Position = textPos;
             text.CharacterSize = (uint)players[playerNumber].Radius / 2;
             text.DisplayedString = ((int)players[playerNumber].Radius).ToString();
         }
@@ -165,6 +165,11 @@ namespace Agar.io
             }
 
             return alivePlayerCount == 1;
+        }
+
+        public static Vector2u GetWindowSize()
+        {
+            return new Vector2u(width, height);
         }
 
         private void WindowClosed(object sender, EventArgs e)
