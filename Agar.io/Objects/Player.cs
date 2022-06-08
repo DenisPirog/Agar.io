@@ -21,32 +21,19 @@ namespace Agar.io.Objects
         {
             Vector2f newPosition = Position + input;
 
-            if (isInBorder(newPosition))
+            if (MathExtensions.IsInBorder(newPosition, Radius))
             {
                 Position = newPosition;
             }
-        }
-        
-        private bool isInBorder(Vector2f newPosition)
-        {
-            Vector2u windowSize = Game.GetWindowSize();
-
-            bool inXBorder = newPosition.X <= windowSize.X - Radius * 2 && newPosition.X >= 0;
-            bool inYBorder = newPosition.Y <= windowSize.Y - Radius * 2 && newPosition.Y >= 0;
-
-            return inXBorder && inYBorder;
         }
 
         public void TryEat(GameObject[] gameObjects)
         {          
             foreach (GameObject gameObject in gameObjects)
             {
-                if (isCollideWithGameObject(gameObject))
+                if (IsCollideWithGameObject(gameObject) && CanEat(gameObject))
                 {
-                    if (CanEat(gameObject))
-                    {
-                        Radius += gameObject.Eat();
-                    }
+                    Radius += gameObject.Eat();
                 }
             }   
         }
@@ -54,7 +41,7 @@ namespace Agar.io.Objects
         private bool CanEat(GameObject objectToEat)
             => Radius - objectToEat.Radius > 0.001;
 
-        private bool isCollideWithGameObject(GameObject gameObject)
-            => this.isColliding(gameObject) && gameObject != this && gameObject.isAlive;
+        private bool IsCollideWithGameObject(GameObject gameObject)
+            => this.IsColliding(gameObject) && gameObject != this && gameObject.isAlive;
     }
 }

@@ -27,7 +27,7 @@ namespace Agar.io.Objects
             }
             else
             {
-                if (player.Position.isEqual(targetPosition))
+                if (player.Position.IsEqual(targetPosition))
                 {
                     targetPosition = Generator.GetPositionOnGameField(player.Radius);
                 }

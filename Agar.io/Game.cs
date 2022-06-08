@@ -72,40 +72,9 @@ namespace Agar.io
         {          
             while (!isEndGame())
             {
-                TrySwitchPlayer();
                 UpdatePlayers();
                 UpdateText();
                 DrawObjects();
-            }
-        }
-
-        private void TrySwitchPlayer()
-        {
-            double minDis = double.MaxValue;
-            int index = 0;
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.R))
-            {
-                for (int i = 0; i < playerCount; i++)
-                {
-                    if (i == playerNumber || !players[i].isAlive || !players[playerNumber].isAlive)
-                        continue;
-
-                    double dis = players[playerNumber].Position.DistanceTo(players[i].Position);
-
-                    if (dis < minDis)
-                    {
-                        minDis = dis;
-                        index = i;
-                    }
-                }
-
-                PlayerController old = controllers[playerNumber];
-
-                controllers[playerNumber] = controllers[index];
-                controllers[index] = old;
-
-                playerNumber = index;
             }
         }
 
