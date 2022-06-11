@@ -39,7 +39,7 @@ namespace Agar.io.Utils
             return isXEqual && isYEqual;
         }
 
-        public static bool IsInBorder(Vector2f newPosition, float radius)
+        public static bool IsInBorder(this Vector2f newPosition, float radius)
         {
             Vector2u windowSize = Game.GetWindowSize();
 

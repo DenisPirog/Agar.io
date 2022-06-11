@@ -21,7 +21,7 @@ namespace Agar.io.Objects
         {
             Vector2f newPosition = Position + input;
 
-            if (MathExtensions.IsInBorder(newPosition, Radius))
+            if (newPosition.IsInBorder(Radius))
             {
                 Position = newPosition;
             }
