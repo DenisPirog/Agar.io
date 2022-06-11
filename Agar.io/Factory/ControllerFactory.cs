@@ -6,9 +6,10 @@ namespace Agar.io.Factory
 {
     class ControllerFactory
     {
-        public static PlayerController CreateController(float radius)
+        public static PlayerController CreateController()
         {
-            Vector2f target = Generator.GetPositionOnGameField(radius);
+            int defaultRadius = 30;
+            Vector2f target = Generator.GetPositionOnGameField(defaultRadius);
 
             return new PlayerController(target);
         }

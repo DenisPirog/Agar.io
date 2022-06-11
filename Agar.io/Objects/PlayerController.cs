@@ -20,10 +20,14 @@ namespace Agar.io.Objects
 
             if (!isBot)
             {
-                if (Keyboard.IsKeyPressed(Keyboard.Key.W)) input.Y = -player.speed;
-                if (Keyboard.IsKeyPressed(Keyboard.Key.S)) input.Y = player.speed;
-                if (Keyboard.IsKeyPressed(Keyboard.Key.A)) input.X = -player.speed;
-                if (Keyboard.IsKeyPressed(Keyboard.Key.D)) input.X = player.speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.W))
+                    input.Y = -player.speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.S))
+                    input.Y = player.speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.A)) 
+                    input.X = -player.speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.D))
+                    input.X = player.speed;
             }
             else
             {
@@ -32,10 +36,14 @@ namespace Agar.io.Objects
                     targetPosition = Generator.GetPositionOnGameField(player.Radius);
                 }
 
-                if (targetPosition.Y < player.Position.Y) input.Y = -player.speed;
-                if (targetPosition.Y > player.Position.Y) input.Y = player.speed;
-                if (targetPosition.X < player.Position.X) input.X = -player.speed;
-                if (targetPosition.X > player.Position.X) input.X = player.speed;              
+                if (targetPosition.Y < player.Position.Y) 
+                    input.Y = -player.speed;
+                if (targetPosition.Y > player.Position.Y) 
+                    input.Y = player.speed;
+                if (targetPosition.X < player.Position.X) 
+                    input.X = -player.speed;
+                if (targetPosition.X > player.Position.X) 
+                    input.X = player.speed;              
             }
 
             return input;

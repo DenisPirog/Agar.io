@@ -1,6 +1,5 @@
 ﻿using System;
 using Agar.io.Objects;
-using Agar.io.Utils;
 using Agar.io.Factory;
 using SFML.System;
 using SFML.Window;
@@ -57,7 +56,7 @@ namespace Agar.io
             for (int i = 0; i < playerCount; i++)
             {
                 players[i] = PlayerFactory.CreatePlayer();
-                controllers[i] = ControllerFactory.CreateController(players[i].Radius);
+                controllers[i] = ControllerFactory.CreateController();
             }
 
             controllers[playerNumber].isBot = false;
@@ -70,7 +69,7 @@ namespace Agar.io
 
         private void GameLoop()
         {          
-            while (!isEndGame())
+            while (!IsEndGame())
             {
                 UpdatePlayers();
                 UpdateText();
@@ -121,7 +120,7 @@ namespace Agar.io
             text.DisplayedString = ((int)players[playerNumber].Radius).ToString();
         }
 
-        private bool isEndGame()
+        private bool IsEndGame()
         {
             int alivePlayerCount = 0;
 
