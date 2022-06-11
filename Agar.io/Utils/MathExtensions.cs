@@ -1,4 +1,5 @@
 ﻿using System;
+using Agar.io.Objects;
 using SFML.System;
 using SFML.Graphics;
 
@@ -6,7 +7,7 @@ namespace Agar.io.Utils
 {
     public static class MathExtensions
     {
-        public static bool IsColliding(this CircleShape object1, CircleShape object2)
+        public static bool IsColliding(this GameObject object1, GameObject object2)
         {
             Vector2f obj1Pos = new Vector2f(object1.Position.X + object1.Radius, object1.Position.Y + object1.Radius);
             Vector2f obj2Pos = new Vector2f(object2.Position.X + object2.Radius, object2.Position.Y + object2.Radius);
