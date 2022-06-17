@@ -1,5 +1,6 @@
 ﻿using Agar.io.Objects;
 using Agar.io.Utils;
+using Agar.io.Controllers;
 using SFML.Graphics;
 using SFML.System;
 
@@ -28,9 +29,9 @@ namespace Agar.io.Factory
 
             Color color = Generator.GetRandomColor();
 
-            int outlineThickness = radius / 30;
+            Controller controller = ControllerFactory.CreateBotController();
 
-            return new Player(radius, color, position, outlineThickness);
+            return new Player(radius, color, position, controller);
         }
     }
 }

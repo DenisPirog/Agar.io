@@ -1,6 +1,7 @@
 ﻿using System;
 using Agar.io.Objects;
 using Agar.io.Factory;
+using Agar.io.Controllers;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
@@ -11,8 +12,6 @@ namespace Agar.io
     {
         private static uint width = 1600;
         private static uint height = 900;
-
-        private PlayerController[] controllers;
 
         private Player[] players;
         private int playerCount = 10;
@@ -29,7 +28,6 @@ namespace Agar.io
         public Game()
         {
             window = new RenderWindow(new VideoMode(width, height), "Agar.io");
-            controllers = new PlayerController[playerCount];
             players = new Player[playerCount];
             food = new Food[foodCount];
             font = new Font("Data/OpenSans-Bold.ttf");
@@ -56,10 +54,9 @@ namespace Agar.io
             for (int i = 0; i < playerCount; i++)
             {
                 players[i] = PlayerFactory.CreatePlayer();
-                controllers[i] = ControllerFactory.CreateController();
             }
 
-            controllers[playerNumber].isBot = false;
+            players[playerNumber].controller = ControllerFactory.CreatePlayerController();
 
             for (int i = 0; i < foodCount; i++)
             {
@@ -83,9 +80,7 @@ namespace Agar.io
             {
                 if (players[i].isAlive)
                 {
-                    players[i].TryMove(controllers[i].GetDirection(players[i]));
-                    players[i].TryEat(players);
-                    players[i].TryEat(food);
+                    players[i].UpdatePlayer(players, food);
                 }
             }
         }

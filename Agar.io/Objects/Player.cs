@@ -1,23 +1,33 @@
 ﻿using SFML.System;
 using SFML.Graphics;
+using Agar.io.Controllers;
 using Agar.io.Utils;
 
 namespace Agar.io.Objects
 {
     public class Player : GameObject
     {
+        public Controller controller;
         public int speed = 1;
 
-        public Player(int radius, Color color, Vector2f position, int outlineThickness)
+        public Player(int radius, Color color, Vector2f position, Controller controller)
         {
             Radius = radius;
             FillColor = color;
             Position = position;
             OutlineColor = Color.Black;
-            OutlineThickness = outlineThickness;
+            OutlineThickness = radius / 30;
+            this.controller = controller;
         }
 
-        public void TryMove(Vector2f input)
+        public void UpdatePlayer(Player[] players, Food[] food)
+        {
+            TryMove(controller.GetDirection(this));
+            TryEat(players);
+            TryEat(food);
+        }
+
+        private void TryMove(Vector2f input)
         {
             Vector2f newPosition = Position + input;
 
@@ -27,7 +37,7 @@ namespace Agar.io.Objects
             }
         }
 
-        public void TryEat(GameObject[] gameObjects)
+        private void TryEat(GameObject[] gameObjects)
         {          
             foreach (GameObject gameObject in gameObjects)
             {

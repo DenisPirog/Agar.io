@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agar.io\Controllers\BotController.cs" />
+    <Compile Include="Agar.io\Controllers\PlayerController.cs" />
     <Compile Include="Agar.io\Factory\ControllerFactory.cs" />
     <Compile Include="Agar.io\Factory\FoodFactory.cs" />
     <Compile Include="Agar.io\Factory\PlayerFactory.cs" />
@@ -62,7 +64,7 @@
     <Compile Include="Agar.io\Game.cs" />
     <Compile Include="Agar.io\Objects\GameObject.cs" />
     <Compile Include="Agar.io\Objects\Player.cs" />
-    <Compile Include="Agar.io\Objects\PlayerController.cs" />
+    <Compile Include="Agar.io\Controllers\Controller.cs" />
     <Compile Include="Agar.io\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Agar.io\Utils\Generator.cs" />
