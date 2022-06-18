@@ -20,9 +20,9 @@ namespace Agar.io
         private List<IDrawable> drawableObjects;
 
         private int playerCount;
-        private int playerNumber = 0;
+        private int playerNumber;
 
-        private int foodCount = 50;
+        private int foodCount;
 
         private RenderWindow window;
 
@@ -36,6 +36,7 @@ namespace Agar.io
             ini = new IniFile("Data/SettingsIni.txt");
             
             windowName = LoadFromIni("Name", "Agar.io", "Window");
+
             width = uint.Parse(LoadFromIni("Width", "1600", "Window"));
             height = uint.Parse(LoadFromIni("Height", "900", "Window"));
 
@@ -46,17 +47,18 @@ namespace Agar.io
             gameObjects = new List<GameObject>();
             updatableObjects = new List<IUpdatable>();
             drawableObjects = new List<IDrawable>();
+            playerNumber = 0;
 
             font = new Font("Data/OpenSans-Bold.ttf");
             text = new Text("", font);
             text.FillColor = Color.Black;
         }
 
-        private string LoadFromIni(string name, string defaultName, string selectionName)
+        private string LoadFromIni(string name, string defaultValue, string selectionName)
         {
             if(!ini.KeyExists(name, selectionName))
             {
-                ini.Write(name, defaultName, selectionName);
+                ini.Write(name, defaultValue, selectionName);
             }
 
             return ini.Read(name, selectionName);
