@@ -56,7 +56,7 @@ namespace Agar.io
 
         private string LoadFromIni(string name, string defaultValue, string selectionName)
         {
-            if(!ini.KeyExists(name, selectionName))
+            if (!ini.KeyExists(name, selectionName))
             {
                 ini.Write(name, defaultValue, selectionName);
             }
