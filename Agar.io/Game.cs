@@ -11,14 +11,15 @@ namespace Agar.io
 {
     class Game
     {
-        private static uint width = 1600;
-        private static uint height = 900;
+        private string windowName;
+        private static uint width;
+        private static uint height;
 
-        public List<GameObject> gameObjects;
-        public List<IUpdatable> updatableObjects;
-        public List<IDrawable> drawableObjects;
+        private List<GameObject> gameObjects;
+        private List<IUpdatable> updatableObjects;
+        private List<IDrawable> drawableObjects;
 
-        private int playerCount = 10;
+        private int playerCount;
         private int playerNumber = 0;
 
         private int foodCount = 50;
@@ -28,9 +29,20 @@ namespace Agar.io
         private Font font;
         private Text text;
 
+        private IniFile ini;
+
         public Game()
         {
-            window = new RenderWindow(new VideoMode(width, height), "Agar.io");
+            ini = new IniFile("Data/SettingsIni.txt");
+            
+            windowName = LoadFromIni("Name", "Agar.io", "Window");
+            width = uint.Parse(LoadFromIni("Width", "1600", "Window"));
+            height = uint.Parse(LoadFromIni("Height", "900", "Window"));
+
+            playerCount = int.Parse(LoadFromIni("PlayerCount", "10", "Game"));
+            foodCount = int.Parse(LoadFromIni("FoodCount", "50", "Game"));
+
+            window = new RenderWindow(new VideoMode(width, height), windowName);
             gameObjects = new List<GameObject>();
             updatableObjects = new List<IUpdatable>();
             drawableObjects = new List<IDrawable>();
@@ -38,6 +50,16 @@ namespace Agar.io
             font = new Font("Data/OpenSans-Bold.ttf");
             text = new Text("", font);
             text.FillColor = Color.Black;
+        }
+
+        private string LoadFromIni(string name, string defaultName, string selectionName)
+        {
+            if(!ini.KeyExists(name, selectionName))
+            {
+                ini.Write(name, defaultName, selectionName);
+            }
+
+            return ini.Read(name, selectionName);
         }
 
         public void Start()
