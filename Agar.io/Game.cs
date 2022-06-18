@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Agar.io.Objects;
 using Agar.io.Factory;
-using Agar.io.Controllers;
+using Agar.io.Interfaces;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
@@ -13,23 +14,27 @@ namespace Agar.io
         private static uint width = 1600;
         private static uint height = 900;
 
-        private Player[] players;
+        public List<GameObject> gameObjects;
+        public List<IUpdatable> updatableObjects;
+        public List<IDrawable> drawableObjects;
+
         private int playerCount = 10;
         private int playerNumber = 0;
 
-        private Food[] food;
         private int foodCount = 50;
 
-        private Text text;
-        private Font font;
-
         private RenderWindow window;
+
+        private Font font;
+        private Text text;
 
         public Game()
         {
             window = new RenderWindow(new VideoMode(width, height), "Agar.io");
-            players = new Player[playerCount];
-            food = new Food[foodCount];
+            gameObjects = new List<GameObject>();
+            updatableObjects = new List<IUpdatable>();
+            drawableObjects = new List<IDrawable>();
+
             font = new Font("Data/OpenSans-Bold.ttf");
             text = new Text("", font);
             text.FillColor = Color.Black;
@@ -53,75 +58,89 @@ namespace Agar.io
         {
             for (int i = 0; i < playerCount; i++)
             {
-                players[i] = PlayerFactory.CreatePlayer();
+                gameObjects.Add(PlayerFactory.CreatePlayer());
             }
 
-            players[playerNumber].controller = ControllerFactory.CreatePlayerController();
+            (gameObjects[playerNumber] as Player).controller = ControllerFactory.CreatePlayer();
 
             for (int i = 0; i < foodCount; i++)
             {
-                food[i] = FoodFactory.CreateFood();
+                gameObjects.Add(FoodFactory.CreateFood());
+            }
+
+            TryAddToLists();
+        }
+
+        private void TryAddToLists()
+        {
+            foreach (GameObject gameObject in gameObjects)
+            {
+                if (gameObject is IUpdatable)
+                {
+                    updatableObjects.Add(gameObject as IUpdatable);
+                }
+
+                if (gameObject is Drawable)
+                {
+                    drawableObjects.Add(gameObject as IDrawable);
+                }
             }
         }
 
         private void GameLoop()
-        {          
+        {
             while (!IsEndGame())
             {
-                UpdatePlayers();
-                UpdateText();
+                UpdateObjects();
                 DrawObjects();
             }
         }
 
-        private void UpdatePlayers()
+        private void UpdateObjects()
         {
-            for (int i = 0; i < playerCount; i++)
+            foreach (IUpdatable updatable in updatableObjects.ToArray())
             {
-                if (players[i].isAlive)
-                {
-                    players[i].UpdatePlayer(players, food);
-                }
+                updatable.Update(gameObjects);
             }
+
+            UpdateText();
+        }
+
+        private void UpdateText()
+        {
+            float smallRadius = gameObjects[playerNumber].Radius / 1.5f;
+
+            Vector2f radius = new Vector2f(smallRadius, smallRadius);
+
+            Vector2f textPos = gameObjects[playerNumber].Position + radius;
+
+            text.Position = textPos;
+            text.CharacterSize = (uint)gameObjects[playerNumber].Radius / 2;
+            text.DisplayedString = ((int)gameObjects[playerNumber].Radius).ToString();
         }
 
         private void DrawObjects()
         {
             window.DispatchEvents();
             window.Clear(Color.White);
-         
-            foreach (Player player in players)
+
+            foreach (IDrawable drawable in drawableObjects.ToArray())
             {
-                if (player.isAlive) window.Draw(player);
+                drawable.Draw(window);
             }
 
-            foreach (Food food in food)
-            {
-                if (food.isAlive) window.Draw(food);
-            }
-
-            if (players[playerNumber].isAlive) window.Draw(text);
+            if (gameObjects[playerNumber].isAlive) window.Draw(text);
 
             window.Display();
         }
-
-        private void UpdateText()
-        {
-            Vector2f radius = new Vector2f(players[playerNumber].Radius / 1.5f, players[playerNumber].Radius / 1.5f);
-            Vector2f textPos = players[playerNumber].Position + radius;
-
-            text.Position = textPos;
-            text.CharacterSize = (uint)players[playerNumber].Radius / 2;
-            text.DisplayedString = ((int)players[playerNumber].Radius).ToString();
-        }
-
+    
         private bool IsEndGame()
         {
             int alivePlayerCount = 0;
 
-            for (int i = 0; i < players.Length; i++)
+            foreach (GameObject gameObject in gameObjects)
             {
-                if (players[i].isAlive)
+                if (gameObject is Player && gameObject.isAlive)
                 {
                     alivePlayerCount += 1;
                 }

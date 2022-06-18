@@ -1,11 +1,13 @@
-﻿using SFML.System;
+﻿using System.Collections.Generic;
+using SFML.System;
 using SFML.Graphics;
+using Agar.io.Interfaces;
 using Agar.io.Controllers;
 using Agar.io.Utils;
 
 namespace Agar.io.Objects
 {
-    public class Player : GameObject
+    public class Player : GameObject, IUpdatable, IDrawable
     {
         public Controller controller;
         public int speed = 1;
@@ -18,13 +20,21 @@ namespace Agar.io.Objects
             OutlineColor = Color.Black;
             OutlineThickness = radius / 30;
             this.controller = controller;
+            eatPoints = Radius / 2;
         }
 
-        public void UpdatePlayer(Player[] players, Food[] food)
+        public void Update(List<GameObject> gameObjects)
         {
-            TryMove(controller.GetDirection(this));
-            TryEat(players);
-            TryEat(food);
+            if (isAlive)
+            {
+                TryMove(controller.GetDirection(this));
+                TryEat(gameObjects);
+            }
+        }
+
+        public void Draw(RenderWindow window)
+        {
+            if (isAlive) window.Draw(this);
         }
 
         private void TryMove(Vector2f input)
@@ -37,21 +47,15 @@ namespace Agar.io.Objects
             }
         }
 
-        private void TryEat(GameObject[] gameObjects)
+        private void TryEat(List<GameObject> gameObjects)
         {          
             foreach (GameObject gameObject in gameObjects)
             {
-                if (IsCollideWithGameObject(gameObject) && CanEat(gameObject))
+                if (this.IsCollideWithAlive(gameObject) && this.CanEat(gameObject))
                 {
                     Radius += gameObject.Eat();
                 }
             }   
         }
-
-        private bool CanEat(GameObject objectToEat)
-            => Radius - objectToEat.Radius > 0.001;
-
-        private bool IsCollideWithGameObject(GameObject gameObject)
-            => this.IsColliding(gameObject) && gameObject != this && gameObject.isAlive;
     }
 }

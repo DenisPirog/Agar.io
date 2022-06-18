@@ -1,7 +1,5 @@
 ﻿using SFML.System;
-using SFML.Window;
 using Agar.io.Objects;
-using Agar.io.Utils;
 
 namespace Agar.io.Controllers
 {

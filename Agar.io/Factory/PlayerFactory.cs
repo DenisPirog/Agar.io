@@ -29,7 +29,7 @@ namespace Agar.io.Factory
 
             Color color = Generator.GetRandomColor();
 
-            Controller controller = ControllerFactory.CreateBotController();
+            Controller controller = ControllerFactory.CreateBot();
 
             return new Player(radius, color, position, controller);
         }

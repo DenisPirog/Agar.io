@@ -1,4 +1,5 @@
 ﻿using SFML.System;
+using SFML.Graphics;
 using SFML.Window;
 using Agar.io.Objects;
 
