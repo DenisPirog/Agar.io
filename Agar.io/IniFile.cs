@@ -7,8 +7,8 @@ namespace Agar.io
 {
     class IniFile   
     {
-        string Path;
-        string EXE = Assembly.GetExecutingAssembly().GetName().Name;
+        private string Path;
+        private string EXE = Assembly.GetExecutingAssembly().GetName().Name;
 
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
