@@ -33,15 +33,13 @@ namespace Agar.io
 
         public Game()
         {
-            ini = new IniFile("Data/SettingsIni.txt");
+            ini = new IniFile("SettingsIni.txt");
             
-            windowName = LoadFromIni("Name", "Agar.io", "Window");
-
-            width = uint.Parse(LoadFromIni("Width", "1600", "Window"));
-            height = uint.Parse(LoadFromIni("Height", "900", "Window"));
-
-            playerCount = int.Parse(LoadFromIni("PlayerCount", "10", "Game"));
-            foodCount = int.Parse(LoadFromIni("FoodCount", "50", "Game"));
+            windowName = ini.Load("Window", "Name", "Agar.io");
+            width = (uint)ini.Load("Window", "Width", 1600);
+            height = (uint)ini.Load("Window", "Height", 900);
+            playerCount = ini.Load("Game", "PlayerCount", 10);
+            foodCount = ini.Load("Game", "FoodCount", 50);
 
             window = new RenderWindow(new VideoMode(width, height), windowName);
             gameObjects = new List<GameObject>();
@@ -52,16 +50,6 @@ namespace Agar.io
             font = new Font("Data/OpenSans-Bold.ttf");
             text = new Text("", font);
             text.FillColor = Color.Black;
-        }
-
-        private string LoadFromIni(string name, string defaultValue, string selectionName)
-        {
-            if (!ini.KeyExists(name, selectionName))
-            {
-                ini.Write(name, defaultValue, selectionName);
-            }
-
-            return ini.Read(name, selectionName);
         }
 
         public void Start()

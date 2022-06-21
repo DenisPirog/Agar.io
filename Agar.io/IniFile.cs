@@ -47,5 +47,32 @@ namespace Agar.io
         {
             return Read(Key, Section).Length > 0;
         }
+
+        public string Load(string selectionName, string name, string defaultValue)
+        {
+            if (!KeyExists(name, selectionName))
+            {
+                Write(name, defaultValue, selectionName);
+            }
+
+            return Read(name, selectionName);
+        }
+
+        public int Load(string selectionName, string name, int defaultValue)
+        {
+            if (!KeyExists(name, selectionName))
+            {
+                Write(name, defaultValue.ToString(), selectionName);
+                return defaultValue;
+            }
+
+            if (int.TryParse(Read(name, selectionName), out int parsedInt))
+            {
+                return parsedInt;
+            }
+
+            Write(name, defaultValue.ToString(), selectionName);
+            return defaultValue;
+        }
     }
 }
