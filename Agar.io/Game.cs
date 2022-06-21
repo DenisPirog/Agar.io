@@ -19,37 +19,34 @@ namespace Agar.io
         private List<IUpdatable> updatableObjects;
         private List<IDrawable> drawableObjects;
 
-        private int playerCount;
-        private int playerNumber;
+        public List<GameObject> objectsToAdd;
+        public List<GameObject> objectsToDelete;
 
+        private int enemyCount;
         private int foodCount;
 
         private RenderWindow window;
 
-        private Font font;
-        private Text text;
-
         private IniFile ini;
+
+        private static Game game;
 
         public Game()
         {
-            ini = new IniFile("SettingsIni.txt");
-            
+            ini = new IniFile("SettingsIni.txt");  
             windowName = ini.Load("Window", "Name", "Agar.io");
             width = (uint)ini.Load("Window", "Width", 1600);
             height = (uint)ini.Load("Window", "Height", 900);
-            playerCount = ini.Load("Game", "PlayerCount", 10);
+            enemyCount = ini.Load("Game", "EnemyCount", 10);
             foodCount = ini.Load("Game", "FoodCount", 50);
 
             window = new RenderWindow(new VideoMode(width, height), windowName);
+
             gameObjects = new List<GameObject>();
             updatableObjects = new List<IUpdatable>();
             drawableObjects = new List<IDrawable>();
-            playerNumber = 0;
-
-            font = new Font("Data/OpenSans-Bold.ttf");
-            text = new Text("", font);
-            text.FillColor = Color.Black;
+            objectsToAdd = new List<GameObject>();
+            objectsToDelete = new List<GameObject>();
         }
 
         public void Start()
@@ -62,40 +59,22 @@ namespace Agar.io
         {
             window.Closed += WindowClosed;
             window.SetFramerateLimit(60);
-
-            CreateObjects();
+            game = this;
+            CreateObjects();      
         }
 
         private void CreateObjects()
         {
-            for (int i = 0; i < playerCount; i++)
+            for (int i = 0; i < enemyCount; i++)
             {
-                gameObjects.Add(PlayerFactory.CreatePlayer());
+                PlayerFactory.CreatePlayer(PlayerType.AI);
             }
 
-            (gameObjects[playerNumber] as Player).controller = ControllerFactory.CreatePlayer();
+            PlayerFactory.CreatePlayer(PlayerType.Player);
 
             for (int i = 0; i < foodCount; i++)
             {
-                gameObjects.Add(FoodFactory.CreateFood());
-            }
-
-            TryAddToLists();
-        }
-
-        private void TryAddToLists()
-        {
-            foreach (GameObject gameObject in gameObjects)
-            {
-                if (gameObject is IUpdatable)
-                {
-                    updatableObjects.Add(gameObject as IUpdatable);
-                }
-
-                if (gameObject is Drawable)
-                {
-                    drawableObjects.Add(gameObject as IDrawable);
-                }
+                FoodFactory.CreateFood();
             }
         }
 
@@ -105,30 +84,17 @@ namespace Agar.io
             {
                 UpdateObjects();
                 DrawObjects();
+                DeleteGameObjects();
+                AddGameObjects();
             }
         }
 
         private void UpdateObjects()
         {
-            foreach (IUpdatable updatable in updatableObjects.ToArray())
+            foreach (IUpdatable updatable in updatableObjects)
             {
                 updatable.Update(gameObjects);
             }
-
-            UpdateText();
-        }
-
-        private void UpdateText()
-        {
-            float smallRadius = gameObjects[playerNumber].Radius / 1.5f;
-
-            Vector2f radius = new Vector2f(smallRadius, smallRadius);
-
-            Vector2f textPos = gameObjects[playerNumber].Position + radius;
-
-            text.Position = textPos;
-            text.CharacterSize = (uint)gameObjects[playerNumber].Radius / 2;
-            text.DisplayedString = ((int)gameObjects[playerNumber].Radius).ToString();
         }
 
         private void DrawObjects()
@@ -136,12 +102,10 @@ namespace Agar.io
             window.DispatchEvents();
             window.Clear(Color.White);
 
-            foreach (IDrawable drawable in drawableObjects.ToArray())
+            foreach (IDrawable drawable in drawableObjects)
             {
                 drawable.Draw(window);
             }
-
-            if (gameObjects[playerNumber].isAlive) window.Draw(text);
 
             window.Display();
         }
@@ -154,11 +118,61 @@ namespace Agar.io
             {
                 if (gameObject is Player && gameObject.isAlive)
                 {
-                    alivePlayerCount += 1;
+                    alivePlayerCount += 1;                    
                 }
             }
 
             return alivePlayerCount == 1;
+        }
+
+        public static void Add(GameObject gameObject)
+        {
+            game.objectsToAdd.Add(gameObject);
+        }
+
+        public static void Delete(GameObject gameObject)
+        {
+            game.objectsToDelete.Add(gameObject);
+        }
+
+        private void AddGameObjects()
+        {
+            foreach(GameObject objectToAdd in objectsToAdd)
+            {
+                gameObjects.Add(objectToAdd);
+
+                if (objectToAdd is IUpdatable)
+                {
+                    updatableObjects.Add(objectToAdd as IUpdatable);
+                }
+                    
+                if (objectToAdd is IDrawable)
+                {
+                    drawableObjects.Add(objectToAdd as IDrawable);
+                }          
+            }
+
+            objectsToAdd.Clear();
+        }
+
+        private void DeleteGameObjects()
+        {
+            foreach (GameObject objectToDelete in objectsToDelete)
+            {
+                gameObjects.Remove(objectToDelete);
+
+                if (objectToDelete is IUpdatable)
+                {
+                    updatableObjects.Remove(objectToDelete as IUpdatable);
+                }
+
+                if (objectToDelete is IDrawable)
+                {
+                    drawableObjects.Remove(objectToDelete as IDrawable);
+                }
+            }
+
+            objectsToDelete.Clear();
         }
 
         public static Vector2u GetWindowSize()

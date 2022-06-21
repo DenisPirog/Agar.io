@@ -17,7 +17,10 @@ namespace Agar.io.Factory
 
             int outlineThickness = radius / 30;
 
-            return new Food(radius, color, position, outlineThickness);
+            Food food = new Food(radius, color, position, outlineThickness);
+            Game.Add(food);
+
+            return food;
         }
     }
 }

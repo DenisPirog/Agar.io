@@ -25,16 +25,13 @@ namespace Agar.io.Objects
 
         public void Update(List<GameObject> gameObjects)
         {
-            if (isAlive)
-            {
-                TryMove(controller.GetDirection(this));
-                TryEat(gameObjects);
-            }
+            TryMove(controller.GetDirection(this));
+            TryEat(gameObjects);
         }
 
         public void Draw(RenderWindow window)
         {
-            if (isAlive) window.Draw(this);
+            window.Draw(this);
         }
 
         private void TryMove(Vector2f input)

@@ -6,9 +6,15 @@ using SFML.System;
 
 namespace Agar.io.Factory
 {
+    enum PlayerType
+    {
+        Player,
+        AI,
+    }
+
     class PlayerFactory
     {
-        public static Player CreatePlayer()
+        public static Player CreatePlayer(PlayerType playerType)
         {
             int radius = 0;
 
@@ -30,8 +36,12 @@ namespace Agar.io.Factory
             Color color = Generator.GetRandomColor();
 
             Controller controller = ControllerFactory.CreateBot();
+            if (playerType == PlayerType.Player) controller = ControllerFactory.CreatePlayer();
+           
+            Player player = new Player(radius, color, position, controller);
 
-            return new Player(radius, color, position, controller);
+            Game.Add(player);
+            return player;
         }
     }
 }

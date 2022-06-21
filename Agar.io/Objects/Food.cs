@@ -18,7 +18,7 @@ namespace Agar.io.Objects
 
         public void Draw(RenderWindow window)
         {
-            if (isAlive) window.Draw(this);
+            window.Draw(this);
         }
     }
 }

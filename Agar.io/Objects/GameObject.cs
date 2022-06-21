@@ -11,6 +11,7 @@ namespace Agar.io.Objects
         public float Eat()
         {
             isAlive = false;
+            Game.Delete(this);
             return eatPoints;
         }
     }
