@@ -18,7 +18,7 @@ namespace Agar.io.Controllers
             return Mouse.GetPosition(Game.game.window);
         }
 
-        public virtual bool isShot()
+        public virtual bool IsShot()
         {
             return Keyboard.IsKeyPressed(Keyboard.Key.Space);
         }

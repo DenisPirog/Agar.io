@@ -60,7 +60,7 @@ namespace Agar.io.Objects
 
         private void TryShot(Vector2i target)
         {
-            if (controller.isShot() && Radius > 20)
+            if (controller.IsShot() && Radius > 20)
             {
                 Game.Add(BulletFactory.CreateBullet(this, target));
             }         

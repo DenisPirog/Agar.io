@@ -1,5 +1,4 @@
-﻿using System;
-using SFML.System;
+﻿using SFML.System;
 using SFML.Graphics;
 using Agar.io.Interfaces;
 using Agar.io.Utils;
@@ -9,11 +8,12 @@ namespace Agar.io.Objects
 {
     public class Bullet : GameObject, IDrawable, IUpdatable
     {
+        private Player owner;
+        private Vector2f target;
+
         private int lifeTime = 0;
         private int maxLifeTime = 100;
         private int damage;
-        private Player owner;
-        private Vector2f target;
 
         public Bullet(int radius, Vector2f origin, Player owner, Vector2i target)
         {
@@ -23,6 +23,7 @@ namespace Agar.io.Objects
             Origin = origin;
             OutlineColor = Color.Black;
             OutlineThickness = Radius / 30;
+
             damage = radius / 2;
             this.owner = owner;
             this.target = (Vector2f)target;
