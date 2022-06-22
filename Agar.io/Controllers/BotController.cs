@@ -31,5 +31,10 @@ namespace Agar.io.Controllers
 
             return input;
         }
+
+        public override bool isShot()
+        {
+            return false;
+        }
     }
 }

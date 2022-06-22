@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SFML.System;
 using SFML.Graphics;
+using Agar.io.Factory;
 using Agar.io.Interfaces;
 using Agar.io.Controllers;
 using Agar.io.Utils;
@@ -26,6 +27,7 @@ namespace Agar.io.Objects
         public void Update(List<GameObject> gameObjects)
         {
             TryMove(controller.GetDirection(this));
+            TryShot(controller.GetMousePosition());
             TryEat(gameObjects);
         }
 
@@ -54,6 +56,14 @@ namespace Agar.io.Objects
                     Radius += gameObject.Eat();
                 }
             }   
+        }
+
+        private void TryShot(Vector2i target)
+        {
+            if (controller.isShot() && Radius > 20)
+            {
+                Game.Add(BulletFactory.CreateBullet(this, target));
+            }         
         }
     }
 }

@@ -44,5 +44,10 @@ namespace Agar.io.Utils
 
             return inXBorder && inYBorder;
         }
+
+        public static Vector2f Lerp(this Vector2f a, Vector2f b, float t)
+        {
+            return a + (b - a) * t;
+        }
     }
 }

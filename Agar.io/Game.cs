@@ -25,11 +25,11 @@ namespace Agar.io
         private int enemyCount;
         private int foodCount;
 
-        private RenderWindow window;
+        public RenderWindow window;
 
         private IniFile ini;
 
-        private static Game game;
+        public static Game game;
 
         public Game()
         {
@@ -100,6 +100,7 @@ namespace Agar.io
 
         private void DrawObjects()
         {
+            
             window.DispatchEvents();
             window.Clear(Color.White);
 

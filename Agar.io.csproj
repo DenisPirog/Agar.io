@@ -57,11 +57,13 @@
   <ItemGroup>
     <Compile Include="Agar.io\Controllers\BotController.cs" />
     <Compile Include="Agar.io\Controllers\PlayerController.cs" />
+    <Compile Include="Agar.io\Factory\BulletFactory.cs" />
     <Compile Include="Agar.io\Factory\ControllerFactory.cs" />
     <Compile Include="Agar.io\Factory\FoodFactory.cs" />
     <Compile Include="Agar.io\Factory\PlayerFactory.cs" />
     <Compile Include="Agar.io\Interfaces\IDrawable.cs" />
     <Compile Include="Agar.io\Interfaces\IUpdatable.cs" />
+    <Compile Include="Agar.io\Objects\Bullet.cs" />
     <Compile Include="Agar.io\Objects\Food.cs" />
     <Compile Include="Agar.io\Game.cs" />
     <Compile Include="Agar.io\Objects\GameObject.cs" />
