@@ -16,28 +16,25 @@ namespace Agar.io.Factory
     {
         public static Player CreatePlayer(PlayerType playerType)
         {
-            int radius = 0;
-
-            switch (AgarioRandom.NextInt(1, 4))
-            {
-                case 1:
-                    radius = 20;
-                    break;
-                case 2:
-                    radius = 30;
-                    break;
-                case 3:
-                    radius = 40;
-                    break;
-            }
+            int radius = AgarioRandom.NextInt(20, 40);
 
             Vector2f position = Generator.GetPositionOnGameField(radius);
 
             Color color = Generator.GetRandomColor();
 
-            Controller controller = ControllerFactory.CreateBot();
-            if (playerType == PlayerType.Player) controller = ControllerFactory.CreatePlayer();
-           
+            Controller controller = new Controller();
+
+            switch (playerType)
+            {
+                case PlayerType.Player:
+                    color = Color.Black;
+                    controller = ControllerFactory.CreatePlayer();
+                    break;
+                case PlayerType.AI:
+                    controller = ControllerFactory.CreateBot();
+                    break;
+            }  
+            
             Player player = new Player(radius, color, position, controller);
 
             Game.Add(player);

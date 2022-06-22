@@ -1,5 +1,4 @@
 ﻿using SFML.Graphics;
-using Agar.io.Interfaces;
 
 namespace Agar.io.Objects
 {

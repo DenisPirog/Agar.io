@@ -15,11 +15,11 @@ namespace Agar.io.Factory
 
             Color color = Generator.GetRandomColor();
 
-            int outlineThickness = radius / 30;
+            Vector2f origin = new Vector2f(radius, radius);
 
-            Food food = new Food(radius, color, position, outlineThickness);
+            Food food = new Food(radius, color, position, origin);
+
             Game.Add(food);
-
             return food;
         }
     }

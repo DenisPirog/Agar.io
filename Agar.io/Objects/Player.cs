@@ -37,6 +37,7 @@ namespace Agar.io.Objects
         private void TryMove(Vector2f input)
         {
             Vector2f newPosition = Position + input;
+            Origin = new Vector2f(Radius, Radius);
 
             if (newPosition.IsInBorder(Radius))
             {

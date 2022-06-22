@@ -1,7 +1,6 @@
 ﻿using System;
 using Agar.io.Objects;
 using SFML.System;
-using SFML.Graphics;
 
 namespace Agar.io.Utils
 {
@@ -9,10 +8,7 @@ namespace Agar.io.Utils
     {
         public static bool IsColliding(this GameObject object1, GameObject object2)
         {
-            Vector2f obj1Pos = new Vector2f(object1.Position.X + object1.Radius, object1.Position.Y + object1.Radius);
-            Vector2f obj2Pos = new Vector2f(object2.Position.X + object2.Radius, object2.Position.Y + object2.Radius);
-
-            double distance = obj1Pos.DistanceTo(obj2Pos);
+            double distance = object1.Position.DistanceTo(object2.Position);
 
             if (distance < object1.Radius + object2.Radius)
             {
@@ -43,8 +39,8 @@ namespace Agar.io.Utils
         {
             Vector2u windowSize = Game.GetWindowSize();
 
-            bool inXBorder = newPosition.X <= windowSize.X - radius * 2 && newPosition.X >= 0;
-            bool inYBorder = newPosition.Y <= windowSize.Y - radius * 2 && newPosition.Y >= 0;
+            bool inXBorder = newPosition.X >= radius && newPosition.X <= windowSize.X - radius;
+            bool inYBorder = newPosition.Y >= radius && newPosition.Y <= windowSize.Y - radius;
 
             return inXBorder && inYBorder;
         }

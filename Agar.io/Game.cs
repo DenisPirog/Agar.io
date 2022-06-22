@@ -82,11 +82,12 @@ namespace Agar.io
         {
             while (!IsEndGame())
             {
+                AddGameObjects();
                 UpdateObjects();
                 DrawObjects();
-                DeleteGameObjects();
-                AddGameObjects();
+                DeleteGameObjects();             
             }
+            EndGame();
         }
 
         private void UpdateObjects()
@@ -116,9 +117,9 @@ namespace Agar.io
 
             foreach (GameObject gameObject in gameObjects)
             {
-                if (gameObject is Player && gameObject.isAlive)
+                if (gameObject is Player)
                 {
-                    alivePlayerCount += 1;                    
+                    alivePlayerCount += 1;                 
                 }
             }
 
@@ -173,6 +174,15 @@ namespace Agar.io
             }
 
             objectsToDelete.Clear();
+        }
+
+        private void EndGame()
+        {
+            while (window.IsOpen)
+            {
+                window.Clear(gameObjects[0].FillColor);
+                window.Display();
+            }
         }
 
         public static Vector2u GetWindowSize()
