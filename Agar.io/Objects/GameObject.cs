@@ -8,7 +8,7 @@ namespace Agar.io.Objects
 
         public float Eat()
         {
-            Game.Delete(this);
+            Die();
             return eatPoints;
         }
 
@@ -18,8 +18,13 @@ namespace Agar.io.Objects
 
             if (Radius <= 0)
             {
-                Game.Delete(this);
+                Die();
             }
+        }
+
+        public void Die()
+        {
+            Game.Delete(this);
         }
     }
 }

@@ -34,12 +34,17 @@ namespace Agar.io.Objects
         {      
             Move();
             TryHit(gameObjects);
-            TryDie();
+            UpdateLifetime();
         }
 
         private void Move()
         {
-            Position = Position.Lerp(target, 0.03f);        
+            Position = Position.Lerp(target, 0.03f);  
+            
+            if (!Position.IsInBorder(Radius))
+            {
+                Die();
+            }
         }
 
         private void TryHit(List<GameObject> gameObjects)
@@ -49,18 +54,18 @@ namespace Agar.io.Objects
                 if (this.IsCollideWithAlive(objectToHit) && objectToHit != owner && objectToHit is Player)
                 {
                     objectToHit.TakeDamage(damage);
-                    Game.Delete(this);
+                    Die();
                 }
             }
         }
 
-        private void TryDie()
+        private void UpdateLifetime()
         {
             lifeTime++;
 
-            if (!Position.IsInBorder(Radius) || lifeTime >= maxLifeTime)
+            if (lifeTime >= maxLifeTime)
             {
-                Game.Delete(this);
+                Die();
             }
         }
 

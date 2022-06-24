@@ -1,4 +1,5 @@
-﻿using Agar.io.Objects;
+﻿using System;
+using Agar.io.Objects;
 using Agar.io.Utils;
 using Agar.io.Controllers;
 using SFML.Graphics;
@@ -32,6 +33,9 @@ namespace Agar.io.Factory
                     break;
                 case PlayerType.AI:
                     controller = ControllerFactory.CreateBot();
+                    break;
+                default:
+                    Console.WriteLine("PlayerType Error");
                     break;
             }  
             

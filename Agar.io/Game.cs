@@ -12,24 +12,24 @@ namespace Agar.io
     class Game
     {
         private string windowName;
-        private static uint width;
-        private static uint height;
+        private uint width;
+        private uint height;
 
         private List<GameObject> gameObjects;
         private List<IUpdatable> updatableObjects;
         private List<IDrawable> drawableObjects;
 
-        public List<GameObject> objectsToAdd;
-        public List<GameObject> objectsToDelete;
+        private List<GameObject> objectsToAdd;
+        private List<GameObject> objectsToDelete;
 
         private int enemyCount;
         private int foodCount;
 
-        public RenderWindow window;
+        private RenderWindow window;
 
         private IniFile ini;
 
-        public static Game game;
+        private static Game game;
 
         public Game()
         {
@@ -188,7 +188,12 @@ namespace Agar.io
 
         public static Vector2u GetWindowSize()
         {
-            return new Vector2u(width, height);
+            return new Vector2u(game.width, game.height);
+        }
+
+        public static Vector2i GetMousePosition()
+        {
+            return Mouse.GetPosition(game.window);
         }
 
         private void WindowClosed(object sender, EventArgs e)

@@ -27,7 +27,12 @@ namespace Agar.io.Objects
         public void Update(List<GameObject> gameObjects)
         {
             TryMove(controller.GetDirection(this));
-            TryShot(controller.GetMousePosition());
+
+            if (controller.IsShot())
+            {
+                TryShot(Game.GetMousePosition());
+            }
+                
             TryEat(gameObjects);
         }
 
@@ -60,7 +65,7 @@ namespace Agar.io.Objects
 
         private void TryShot(Vector2i target)
         {
-            if (controller.IsShot() && Radius > 20)
+            if (Radius > 20)
             {
                 Game.Add(BulletFactory.CreateBullet(this, target));
             }         

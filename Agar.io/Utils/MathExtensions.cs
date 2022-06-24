@@ -8,7 +8,7 @@ namespace Agar.io.Utils
     {
         public static bool IsColliding(this GameObject object1, GameObject object2)
         {
-            double distance = object1.Position.DistanceTo(object2.Position);
+            double distance = object1.DistanceTo(object2);
 
             if (distance < object1.Radius + object2.Radius)
             {
@@ -16,6 +16,11 @@ namespace Agar.io.Utils
             }
 
             return false;
+        }
+
+        public static double DistanceTo(this GameObject from, GameObject to)
+        {
+            return from.Position.DistanceTo(to.Position);
         }
 
         public static double DistanceTo(this Vector2f from, Vector2f to)
